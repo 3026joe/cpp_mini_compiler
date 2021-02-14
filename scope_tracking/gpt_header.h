@@ -21,6 +21,9 @@ typedef struct stack
 	s_node* top;
 }stack;
 
+stack* s;
+gpt* g;
+
 stack* init_stack();
 s_node* init_s_node(node* val);
 gpt* init_gpt();

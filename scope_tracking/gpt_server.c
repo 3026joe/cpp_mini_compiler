@@ -5,9 +5,6 @@
 //assuming global stack called s
 //assuming global gpt called g
 
-stack* s;
-gpt* g;
-
 stack* init_stack()
 {
 	stack* s_new = (stack*)malloc(sizeof(stack));

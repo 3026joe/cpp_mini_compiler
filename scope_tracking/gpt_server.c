@@ -5,11 +5,14 @@
 //assuming global stack called s
 //assuming global gpt called g
 
+stack* s;
+gpt* g;
+
 stack* init_stack()
 {
-	stack* s = (stack*)malloc(sizeof(stack));
-	s->head = NULL;
-	return s;
+	stack* s_new = (stack*)malloc(sizeof(stack));
+	s_new->top = NULL;
+	return s_new;
 }
 
 s_node* init_s_node(node* val)
@@ -22,9 +25,9 @@ s_node* init_s_node(node* val)
 
 gpt* init_gpt()
 {
-	gpt* g = (gpt*)malloc(sizeof(gpt));
-	g->root = NULL;
-	return g;
+	gpt* g_new = (gpt*)malloc(sizeof(gpt));
+	g_new->root = NULL;
+	return g_new;
 }
 
 node* init_node(int scope)
@@ -62,6 +65,42 @@ void insert_to_gpt(int scope)
 		parent->child = n;				//updating the new node as a child to the parent
 	}
 	else								//creating global scope
-		 gpt->root = n;
+		 g->root = n;
 	stack_push(n);
+}
+
+void disp_gpt()
+{
+	printf("displaying GPT:\n\n");
+	if(g->root == NULL)
+		printf("GPT Empty\n");
+	else
+		rec_disp_gpt(g->root);
+	printf("\n\n");
+}
+
+void rec_disp_gpt(node* root)
+{
+	if(root == NULL)
+		return;
+	printf("%d has children: ",root->scope);
+	node* c = root->child;
+	while(c != NULL)
+	{
+		printf("%d\t", c->scope);
+		c = c->sibling;
+	}
+	printf("\n");
+	rec_disp_gpt(root->sibling);
+	rec_disp_gpt(root->child);
+}
+
+void disp_stack()
+{
+	s_node* sn = s->top;
+	while(sn != NULL)
+	{
+		printf("%d\n",sn->val->scope);
+		sn = sn->next;
+	}
 }

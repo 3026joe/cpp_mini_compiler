@@ -5,7 +5,7 @@ typedef struct node
 	int scope;
 }node;
 
-typedef struct gpt
+typedef struct init_gpt
 {
 	node* root;
 }gpt;
@@ -25,3 +25,9 @@ stack* init_stack();
 s_node* init_s_node(node* val);
 gpt* init_gpt();
 node* init_node(int scope);
+void stack_push(node* val);
+void stack_pop();
+void insert_to_gpt(int scope);
+void disp_gpt();
+void rec_disp_gpt(node* root);
+void disp_stack();

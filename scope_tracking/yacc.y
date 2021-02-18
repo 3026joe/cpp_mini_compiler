@@ -9,15 +9,26 @@
 	FILE* sym_tab_debug;
 	FILE* gpt_debug;
 	extern int yylex();
+	extern int lineno;
 	void remove_scope();
 	void create_scope();
 	void yyerror();
 	int scope = 0;
+	int type = -1;
 %}
 
-%token T_RETURN T_MAIN T_WHILE T_COUT T_CIN T_ENDL T_BREAK T_CONTINUE T_SWITCH T_CASE T_DEFAULT T_INT T_FLOAT T_DOUBLE T_CHAR T_VOID T_CLASS T_STRUCT T_SIZEOF T_PUBLIC T_PRIVATE T_PROTECTED T_GOTO T_UNSIGNED T_SHORT T_INCLUDE T_DEFINE T_NUM T_ID T_HEADER T_STRINGLITERAL T_LESSERTHAN T_GREATERTHAN T_ASSIGNMENT T_LESSTHANEQUALTO T_GREATERTHANEQUALTO T_EQUALTO T_NOTEQUALTO T_PLUS T_MINUS T_MULTIPLY T_DIVIDE T_INCREMENT T_DECREMENT T_NOT T_OR T_AND T_MODULUS T_COMMA T_DOT T_OPENSQUAREBRACKET T_CLOSESQUAREBRACKET T_DIMENSIONS T_CURLYBRACES T_OPENCURLYBRACES T_CLOSECURLYBRACES T_OPENPARENTHESIS T_CLOSEPARENTHESIS
+%token T_COLON T_RETURN T_MAIN T_WHILE T_COUT T_CIN T_ENDL T_BREAK T_CONTINUE T_SWITCH T_CASE T_DEFAULT T_INT T_FLOAT T_DOUBLE T_CHAR T_VOID T_CLASS T_STRUCT T_SIZEOF T_PUBLIC T_PRIVATE T_PROTECTED T_GOTO T_UNSIGNED T_SHORT T_INCLUDE T_DEFINE T_NUM T_ID T_HEADER T_STRINGLITERAL T_LESSERTHAN T_GREATERTHAN T_ASSIGNMENT T_LESSTHANEQUALTO T_GREATERTHANEQUALTO T_EQUALTO T_NOTEQUALTO T_PLUS T_MINUS T_MULTIPLY T_DIVIDE T_INCREMENT T_DECREMENT T_NOT T_OR T_AND T_MODULUS T_COMMA T_DOT T_OPENSQUAREBRACKET T_CLOSESQUAREBRACKET T_DIMENSIONS T_CURLYBRACES T_OPENCURLYBRACES T_CLOSECURLYBRACES T_OPENPARENTHESIS T_CLOSEPARENTHESIS
 
 %start PROG
+
+%union
+{
+    int i;
+    float f;
+    char* text;
+}
+
+%type <i> TYPE
 
 %%
 
@@ -43,7 +54,23 @@ GLOBAL
 	| ASSGN ';'
 	;
 FUNC_DECLR
-	: TYPE T_ID T_OPENPARENTHESIS { create_scope(); } EMPTY_LISTVAR T_CLOSEPARENTHESIS FUNC_DECLR2
+	: TYPE T_ID 
+		{
+			if($1 == T_INT)
+				type = F_INT;
+			else if($1 == T_FLOAT)
+				type = F_FLOAT;
+			else if($1 == T_DOUBLE)
+				type = F_DOUBLE;
+			else if($1 == T_CHAR)
+				type = F_CHAR;
+			else if($1 == T_VOID)
+				type = F_VOID;
+			else if($1 == T_SHORT)
+				type = F_SHORT;
+			insert_symbol(yylval.text, strlen(yylval.text), type, lineno, scope);
+		}
+		T_OPENPARENTHESIS { create_scope(); } EMPTY_LISTVAR T_CLOSEPARENTHESIS FUNC_DECLR2
 	;
 EMPTY_LISTVAR
 	: LISTVAR
@@ -68,27 +95,28 @@ STMT
 	| EMPTY
 	;
 SWITCH
-	: T_SWITCH T_OPENPARENTHESIS SWITCH2
+	: T_SWITCH { create_scope(); } T_OPENPARENTHESIS SWITCH2
 	;
 SWITCH2
-	: EXPR T_CLOSEPARENTHESIS SWT_BLOCK
-	| ASSGN T_CLOSEPARENTHESIS SWT_BLOCK
+	: EXPR T_CLOSEPARENTHESIS T_OPENCURLYBRACES SWT_BLOCK T_CLOSECURLYBRACES
+	| ASSGN T_CLOSEPARENTHESIS T_OPENCURLYBRACES SWT_BLOCK T_CLOSECURLYBRACES { remove_scope(); }
 	;
 SWT_BLOCK
 	: STMT
 	| T_CASE CASE
-	| T_DEFAULT ';' STMT
-	;
-CASE
-	: T_ID ':' STMT BREAK CASE2
-	| T_NUM ':' STMT BREAK CASE2
-	;
-CASE2
-	: T_CASE CASE ':'
+	| T_DEFAULT T_COLON STMT
 	| EMPTY
 	;
+CASE
+	: T_ID T_COLON STMT BREAK CASE2
+	| T_NUM T_COLON STMT BREAK CASE2
+	;
+CASE2
+	: T_CASE CASE T_COLON
+	| SWT_BLOCK
+	;
 BREAK
-	: T_BREAK
+	: T_BREAK ';'
 	| EMPTY
 	;
 WHILE
@@ -97,6 +125,8 @@ WHILE
 WHILE2
 	: EXPR T_CLOSEPARENTHESIS WHILE3
 	| ASSGN T_CLOSEPARENTHESIS WHILE3
+	| EXPR T_CLOSEPARENTHESIS ';' STMT
+	| ASSGN T_CLOSEPARENTHESIS ';' STMT
 	;
 WHILE3
 	: BLOCK { remove_scope(); } STMT
@@ -127,12 +157,12 @@ DECLR
 	: TYPE LISTVAR 
 	;
 TYPE
-	: T_VOID
-	| T_INT
-	| T_FLOAT
-	| T_CHAR
-	| T_DOUBLE
-	| T_SHORT
+	: T_VOID { type = VOID; }
+	| T_INT { type = INT; }
+	| T_FLOAT { type = FLOAT; }
+	| T_CHAR { type = CHAR; }
+	| T_DOUBLE { type = DOUBLE; }
+	| T_SHORT { type = SHORT; }
 	;
 LISTVAR
 	: VAR LISTVAR2 
@@ -142,8 +172,8 @@ LISTVAR2
 	| EMPTY
 	;
 VAR
-	: T_ID
-	| ASSGN 
+	: T_ID { insert_symbol(yylval.text, strlen(yylval.text), type, lineno, scope-1); }
+	| T_ID T_ASSIGNMENT EXPR { { insert_symbol(yylval.text, strlen(yylval.text), type, lineno, scope-1); } }
 	;
 ASSGN
 	: T_ID T_ASSIGNMENT EXPR 
@@ -220,9 +250,9 @@ void remove_scope()
 
 int main (int argc, char *argv[])
 {
-	sym_tab_debug = fopen("C:\\Users\\Joseph_Dominic\\Desktop\\My_stuff\\COLLEGE\\Sem 6\\CD\\project\\cpp_mini_compiler\\scope_tracking\\New folder\\debug_info\\sym_tab_debug.txt", "w");
+	sym_tab_debug = fopen("sym_tab_debug.txt", "w");
 
-	gpt_debug = fopen("C:\\Users\\Joseph_Dominic\\Desktop\\My_stuff\\COLLEGE\\Sem 6\\CD\\project\\cpp_mini_compiler\\scope_tracking\\New folder\\debug_info\\gpt_debug.txt", "w");
+	gpt_debug = fopen("gpt_debug.txt", "w");
 
 	printf("sym_tab_debug %p\n", sym_tab_debug);
 	printf("gpt_debug %p\n", gpt_debug);

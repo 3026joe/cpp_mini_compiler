@@ -7,8 +7,8 @@
 	#include "y.tab.h"
 	void yyerror();
 	int yywrap();
+	char* p;
 	int lineno = 1; // initialize to 1
-	int type = -1;
 %}
 
 %x ML_COMMENT
@@ -25,7 +25,7 @@ number	{digits}{opFraction}{opExponent}
 %%
 \/\/.*
 "/*"					{ printf("Eat up comment from line %d ", lineno); BEGIN(ML_COMMENT); }
-<ML_COMMENT>"*/" 		{ printf("to line %d\n", lineno); BEGIN(INITIAL); }
+<ML_COMMENT>"*/" 		{ printf("to line %d\n", lineno);}
 <ML_COMMENT>[^*\n]+		
 <ML_COMMENT>"*"			
 <ML_COMMENT>"\n"		{ lineno += 1; }
@@ -41,11 +41,11 @@ number	{digits}{opFraction}{opExponent}
 "switch"								return T_SWITCH;
 "case"									return T_CASE;
 "default"								return T_DEFAULT;
-"int"									{ type = INT; return T_INT;}
-"float"									{ type = FLOAT; return T_FLOAT; }
-"double"								{ type = DOUBLE; return T_DOUBLE; }
-"char"									{ type = CHAR; return T_CHAR; }
-"void"									{ type = VOID; return T_VOID; }
+"int"									{ return T_INT; }
+"float"									{ return T_FLOAT; }
+"double"								{ return T_DOUBLE; }
+"char"									{ return T_CHAR; }
+"void"									{ return T_VOID; }
 "class"									return T_CLASS;
 "struct"								return T_STRUCT;
 "sizeof"								return T_SIZEOF;
@@ -54,11 +54,16 @@ number	{digits}{opFraction}{opExponent}
 "protected"								return T_PROTECTED;
 "goto"									return T_GOTO;
 "unsigned"								return T_UNSIGNED;
-"short"									{ type = SHORT; return T_SHORT; }
+"short"									{ return T_SHORT; }
 "#include"								return T_INCLUDE;
 "#define"								return T_DEFINE;
 {number}								return T_NUM;
-{letter}({letter}|{digit})*				{ insert_symbol(yytext, strlen(yytext), type, lineno); return T_ID;}
+{letter}({letter}|{digit})*				{
+											p=(char*)malloc(sizeof(char)*(strlen(yytext)+1));
+											strcpy(p, yytext);
+											yylval.text=p;
+											return T_ID;
+										}
 {letter}({letter}|{digit})*\.h			return T_HEADER;
 \".*\"									return T_STRINGLITERAL;
 "<="									return T_LESSTHANEQUALTO;
@@ -75,6 +80,7 @@ number	{digits}{opFraction}{opExponent}
 "*"										return T_MULTIPLY;
 "/"										return T_DIVIDE;
 "!"										return T_NOT;
+":"										return T_COLON;
 "||"									return T_OR;
 "&&"									return T_AND;
 "%"										return T_MODULUS;
@@ -96,7 +102,7 @@ number	{digits}{opFraction}{opExponent}
 %%
 void yyerror()
 {
-	fprintf(stderr, "dafuq is \"%s\" on line no %d????\n", yytext, lineno);
+	fprintf(stderr, "Unrecognized token \"%s\" on line no %d????\n", yytext, lineno);
 	exit(1);
 }
 

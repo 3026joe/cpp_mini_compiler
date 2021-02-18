@@ -10,9 +10,22 @@ void main()
 		{
 			y = 10;
 		}
-		while(x = 100)
-			z = 1000;
+		while(x = 100);
+		z = 1000;
 		x = a / b;
+	}
+	switch(a)
+	{
+		case 1:
+			b=10.0;
+			break;
+		case 5:
+			d = 100;
+			while(x = 100);
+			int m;
+			m = s;
+		default:
+			c = 2.0;
 	}
 }
 

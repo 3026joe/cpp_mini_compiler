@@ -43,6 +43,6 @@ static table* t;
 extern FILE* sym_tab_debug;
 
 table* init_table();
-symbol* init_symbol(char* name, int len, int type, int lineno);
-void insert_symbol(char* name, int len, int type, int lineno);
+symbol* init_symbol(char* name, int len, int type, int lineno, int scope);
+void insert_symbol(char* name, int len, int type, int lineno, int scope);
 void display_sym_tab();

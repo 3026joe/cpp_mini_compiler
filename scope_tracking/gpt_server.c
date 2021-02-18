@@ -62,7 +62,7 @@ void insert_to_gpt(int scope)
 		parent->child = n;				//updating the new node as a child to the parent
 	}
 	else								//creating global scope
-		 g->root = n;
+		g->root = n;
 	stack_push(n);
 }
 

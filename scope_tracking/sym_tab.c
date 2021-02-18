@@ -10,7 +10,7 @@ table* init_table()
 	return t;
 }
 
-symbol* init_symbol(char* name, int len, int type, int lineno)
+symbol* init_symbol(char* name, int len, int type, int lineno, int scope)
 {
 	symbol* s = (symbol*)malloc(sizeof(symbol));
 	s->name = (char*)malloc(sizeof(char)*(len+1));
@@ -18,14 +18,14 @@ symbol* init_symbol(char* name, int len, int type, int lineno)
 	s->len = len;
 	s->type = type;
 	s->line = lineno;
-	s->scope = 0;
+	s->scope = scope;
 	s->next = NULL;
 	return s;
 }
 
-void insert_symbol(char* name, int len, int type, int lineno)
+void insert_symbol(char* name, int len, int type, int lineno, int scope)
 {
-	symbol* s = init_symbol(name, len, type, lineno);
+	symbol* s = init_symbol(name, len, type, lineno, scope);
 	if(t->head == NULL)
 	{
 		t->head = s;

@@ -5,7 +5,7 @@ typedef struct node
 	int scope;
 }node;
 
-typedef struct init_gpt
+typedef struct gpt
 {
 	node* root;
 }gpt;
@@ -23,6 +23,7 @@ typedef struct stack
 
 stack* s;
 gpt* g;
+extern FILE* gpt_debug;
 
 stack* init_stack();
 s_node* init_s_node(node* val);

@@ -68,26 +68,25 @@ void insert_to_gpt(int scope)
 
 void disp_gpt()
 {
-	printf("displaying GPT:\n\n");
 	if(g->root == NULL)
-		printf("GPT Empty\n");
+		fprintf(gpt_debug, "GPT Empty\n");
 	else
 		rec_disp_gpt(g->root);
-	printf("\n\n");
+	fprintf(gpt_debug, "\n\n");
 }
 
 void rec_disp_gpt(node* root)
 {
 	if(root == NULL)
 		return;
-	printf("%d has children: ",root->scope);
+	fprintf(gpt_debug, "%d has children: ",root->scope);
 	node* c = root->child;
 	while(c != NULL)
 	{
-		printf("%d\t", c->scope);
+		fprintf(gpt_debug, "%d\t", c->scope);
 		c = c->sibling;
 	}
-	printf("\n");
+	fprintf(gpt_debug, "\n");
 	rec_disp_gpt(root->sibling);
 	rec_disp_gpt(root->child);
 }
@@ -97,7 +96,7 @@ void disp_stack()
 	s_node* sn = s->top;
 	while(sn != NULL)
 	{
-		printf("%d\n",sn->val->scope);
+		fprintf(gpt_debug, "%d\n",sn->val->scope);
 		sn = sn->next;
 	}
 }

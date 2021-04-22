@@ -1,0 +1,57 @@
+a                    = 5                                            
+b                    = 6.0                                          
+c                    = 10.9                                         
+d                    = 0                                            
+___L1:
+___t1                = d                    <   5                   
+iffalse ___t1 GOTO ___L2
+___L3:
+d                    = 10                                           
+iffalse d GOTO ___L4
+d                    = 10                                           
+goto ___L4
+goto ___L3
+___L4:
+___L5:
+d                    = 100                                          
+iffalse d GOTO ___L6
+goto ___L5
+___L6:
+z                    = 1000                                         
+___t2                = a                    /   b                   
+x                    = ___t2                                        
+___t3                = a                    +   b                   
+a                    = ___t3                                        
+goto ___L1
+___L2:
+___t4                = a                    ==  1                   
+iffalse ___t4 GOTO ___L8
+b                    = 10.0                                         
+goto ___L7
+___L8:
+___t5                = a                    ==  5                   
+iffalse ___t5 GOTO ___L9
+d                    = 100                                          
+___L10:
+d                    = 100                                          
+iffalse d GOTO ___L11
+goto ___L10
+___L11:
+___L9:
+c                    = 2.0                                          
+___L7:
+
+
+Start of Function func
+g                    = 9                                            
+h                    = 10                                           
+
+End of Function func
+
+
+
+Start of Function func2
+hmmm                 = 0                                            
+
+End of Function func2
+

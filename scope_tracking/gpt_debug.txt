@@ -1,0 +1,182 @@
+displaying gpt
+0 has children: 1	
+1 has children: 
+
+
+displaying stack
+1
+0
+displaying gpt
+0 has children: 1	
+1 has children: 2	
+2 has children: 
+
+
+displaying stack
+2
+1
+0
+displaying gpt
+0 has children: 1	
+1 has children: 2	
+2 has children: 3	
+3 has children: 
+
+
+displaying stack
+3
+2
+1
+0
+displaying gpt
+0 has children: 1	
+1 has children: 2	
+2 has children: 3	
+3 has children: 
+
+
+displaying stack
+2
+1
+0
+displaying gpt
+0 has children: 1	
+1 has children: 2	
+2 has children: 4	3	
+4 has children: 
+3 has children: 
+
+
+displaying stack
+4
+2
+1
+0
+displaying gpt
+0 has children: 1	
+1 has children: 2	
+2 has children: 4	3	
+4 has children: 
+3 has children: 
+
+
+displaying stack
+2
+1
+0
+displaying gpt
+0 has children: 1	
+1 has children: 2	
+2 has children: 5	4	3	
+5 has children: 
+4 has children: 
+3 has children: 
+
+
+displaying stack
+5
+2
+1
+0
+displaying gpt
+0 has children: 1	
+1 has children: 2	
+2 has children: 5	4	3	
+5 has children: 6	
+4 has children: 
+3 has children: 
+6 has children: 
+
+
+displaying stack
+6
+5
+2
+1
+0
+displaying gpt
+0 has children: 1	
+1 has children: 2	
+2 has children: 5	4	3	
+5 has children: 6	
+4 has children: 
+3 has children: 
+6 has children: 
+
+
+displaying stack
+5
+2
+1
+0
+displaying gpt
+0 has children: 1	
+1 has children: 2	
+2 has children: 5	4	3	
+5 has children: 7	6	
+4 has children: 
+3 has children: 
+7 has children: 
+6 has children: 
+
+
+displaying stack
+7
+5
+2
+1
+0
+displaying gpt
+0 has children: 1	
+1 has children: 2	
+2 has children: 5	4	3	
+5 has children: 7	6	
+4 has children: 
+3 has children: 
+7 has children: 8	
+6 has children: 
+8 has children: 
+
+
+displaying stack
+8
+7
+5
+2
+1
+0
+displaying gpt
+0 has children: 1	
+1 has children: 2	
+2 has children: 5	4	3	
+5 has children: 7	6	
+4 has children: 
+3 has children: 
+7 has children: 8	
+6 has children: 
+8 has children: 
+
+
+displaying stack
+7
+5
+2
+1
+0
+displaying gpt
+0 has children: 1	
+1 has children: 2	
+2 has children: 5	4	3	
+5 has children: 7	6	
+4 has children: 
+3 has children: 
+7 has children: 8	
+6 has children: 
+8 has children: 
+
+
+displaying stack
+5
+2
+1
+0

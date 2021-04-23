@@ -1,0 +1,24 @@
+inserted scope 1
+
+inserted scope 2
+
+inserted scope 3
+
+inserted scope 4
+
+inserted scope 5
+
+inserted scope 6
+
+inserted scope 7
+
+inserted scope 8
+
+Name	len	type	lineno	scope
+a	1	4	3	1
+b	1	6	4	1
+c	1	7	5	1
+m	1	4	25	6
+func	4	4	32	7
+g	1	4	34	7
+h	1	4	35	7

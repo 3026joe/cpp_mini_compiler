@@ -1,0 +1,211 @@
+START
+	: PROG
+	;
+
+PROG
+	: T_INCLUDE '<' T_HEADER '>' PROG
+	| T_DEFINE T_ID T_NUM PROG
+	| T_DEFINE T_ID T_STRINGLITERAL PROG
+	| T_CLASS T_ID '{' CLASS_STMT '}' PROG
+	| MAIN PROG
+	| FUNC_DECLR PROG
+	| DECLR ';' PROG
+	| ASSGN ';' PROG
+	| 
+	;
+
+FUNC_DECLR
+	: TYPE T_ID '(' EMPTY_LISTVAR ')' FUNC_DECLR2
+	;
+
+EMPTY_LISTVAR
+	: LISTVAR
+	| 
+	;
+
+FUNC_DECLR2
+	: '{' STMT '}'
+	| ';'
+	;
+
+MAIN
+	: TYPE T_MAIN '(' EMPTY_LISTVAR ')' '{' STMT '}'
+	| T_MAIN '(' EMPTY_LISTVAR ')' '{' STMT '}'
+	;
+
+CLASS_STMT
+	: CLASS CLASS_STMT
+	| CLASS
+	;
+
+CLASS
+	: CLASS_LABEL ':'
+	| DECLR2
+	| FUNC_DECLR
+	;
+
+DECLR2
+	: TYPE LISTVAR2
+	;
+
+LISTVAR2
+	: LISTVAR2 ',' T_ID ARRAY
+	| T_ID ARRAY
+	;
+
+CLASS_LABEL
+	: T_PUBLIC
+	| T_PRIVATE
+	| T_PROTECTED
+	;
+
+STMT
+	: STMT_NO_BLOCK STMT
+	| BLOCK STMT
+	| 
+	;
+
+STMT_NO_BLOCK
+	: DECLR ';'
+	| ASSGN ';'
+	| WHILE
+	| SWITCH
+	| T_COUT T_COUT_OP  COUT ';'
+	| T_CIN T_CIN_OP T_ID CIN ';'
+	| T_RETURN ';'
+	;
+
+BLOCK
+	: '{' STMT '}'
+	;
+
+SWITCH
+	: T_SWITCH '(' SWITCH2
+	;
+
+SWITCH2
+	: EXPR ')' '{' SWT_BLOCK '}'
+	| ASSGN ')' '{' SWT_BLOCK '}'
+	;
+
+SWT_BLOCK
+	: STMT
+	| CASE SWT_BLOCK
+	| T_DEFAULT ':' STMT
+	;
+
+CASE
+	: T_CASE T_ID ':' STMT BREAK
+	| T_CASE T_NUM ':' STMT BREAK
+	;
+
+BREAK
+	: T_BREAK ';'
+	| 
+	;
+
+WHILE
+	: T_WHILE '(' WHILE_PARAN ')' WHILE2
+	;
+
+WHILE2
+	: '{' WHL_BLOCK '}'
+	| ';'
+	| STMT_NO_BLOCK
+	;
+
+WHL_BLOCK
+	: STMT
+	| WHL_BLOCK BREAK
+	;
+
+WHILE_PARAN
+	: EXPR
+	| ASSGN
+	;
+
+COUT
+	: COUT T_COUT_OP T_STRINGLITERAL
+	| COUT T_COUT_OP T_ID
+	| T_COUT_OP T_STRINGLITERAL
+	| T_COUT_OP T_ID
+	;
+
+CIN
+	: CIN T_CIN_OP T_ID
+	| T_CIN_OP T_ID
+	;
+
+DECLR
+	: TYPE LISTVAR 
+	;
+
+TYPE
+	: T_VOID
+	| T_INT
+	| T_FLOAT
+	| T_CHAR
+	| T_DOUBLE
+	| T_SHORT
+	;
+
+LISTVAR
+	: LISTVAR ',' VAR
+	| VAR
+	;
+
+VAR
+	: T_ID ARRAY
+	| T_ID '=' EXPR
+	;
+
+ARRAY
+	: ARRAY '[' T_NUM ']'
+	| '[' T_NUM ']'
+	|
+	;
+
+ASSGN
+	: T_ID '=' EXPR
+	;
+
+EXPR
+	: EXPR REL_OP T
+	| T
+	;
+
+T
+	: T '+' F
+	| T '-' F
+	| F
+	;
+
+F
+	: F '*' G
+	| F '/' G
+	| F '%' G
+	| G
+	;
+
+G
+	: '(' EXPR ')'
+	| T_ID POSTFIX_OP
+	| T_NUM
+	| T_INCREMENT T_ID
+	| T_DECREMENT T_ID
+	;
+
+REL_OP
+	: T_LESSTHANEQUAL
+	| T_GREATERTHANEQUAL
+	| '<'
+	| '>'
+	| T_EQUALTO
+	| T_NOTEQUALTO
+	;
+
+POSTFIX_OP
+	: T_INCREMENT
+	| T_DECREMENT
+	| 
+	;

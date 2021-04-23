@@ -1,2 +1,2 @@
-# cpp_mini_compiler
+# ++G
 A mini C++ compiler
